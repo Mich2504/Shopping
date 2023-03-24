@@ -9,13 +9,14 @@ using Shopping.Data.Entities;
 
 namespace Shopping.Controllers
 {
+    //Es una clase que hereda de la clase controller
     public class CountriesController : Controller
     {
         private readonly DataContext _context;
-
+        //Por el constructor se manda el contexto de datos es decir el acceso a la BD
         public CountriesController(DataContext context)
         {
-            _context = context;
+            _context = context;// se le asigna a un atributo si no solo tendriamos acceso en el constructor
         }
 
         // GET: Countries

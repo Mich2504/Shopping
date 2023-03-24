@@ -7,7 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DataContext>(o =>//se configuro la base de datos 
 {
-    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")); //el cual se definio en appsetting.json
+    o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));//aqui se hace una inyeccion de datos //el cual se definio en appsetting.json
 });
 
 var app = builder.Build();

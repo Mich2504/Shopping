@@ -12,7 +12,10 @@ namespace Shopping.Data.Entities
         }
         //Se debe mapear
         public DbSet<Category> Categories { get; set; }
+        public DbSet<City> Cities { get; set; }
         public DbSet<Country> Countries { get; set; }
+        public DbSet<State> States { get; set; }
+
         //Se deben validar que no existan registros repetidos en la BD
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,7 +23,9 @@ namespace Shopping.Data.Entities
             //Creacion del indice
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Category>().HasIndex(c => c.Name).IsUnique();
+            modelBuilder.Entity<City>().HasIndex("Name", "StateId").IsUnique();
             modelBuilder.Entity<Country>().HasIndex(c => c.Name).IsUnique();//Lo que quiere decir que es un indice unico sobre el campo name
+            modelBuilder.Entity<State>().HasIndex("Name","CountryId").IsUnique();//Creacion de indice compuesto
             //se guardan los cambios en la consola (add-migration AddIndexToCountry)
             //No olvides agregar la migracion
         }

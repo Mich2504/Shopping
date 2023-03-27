@@ -96,7 +96,8 @@ namespace Shopping.Controllers
                 return NotFound();
             }
 
-            var country = await _context.Countries.FindAsync(id);
+            var country = await _context.Countries.Include(c=> c.States)
+                .FirstOrDefaultAsync(c => c.Id==id);
             if (country == null)
             {
                 return NotFound();
@@ -292,6 +293,24 @@ namespace Shopping.Controllers
 
             }
             return View(model);
+        }
+        // Detalles de estado
+        public async Task<IActionResult> DetailsState(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            State state = await _context.States.Include(s => s.Cities)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (state == null)
+            {
+                return NotFound();
+            }
+
+            return View(state);
         }
 
     }

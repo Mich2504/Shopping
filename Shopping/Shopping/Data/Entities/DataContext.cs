@@ -1,9 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+using Shooping.Data.Entities;
 
 namespace Shopping.Data.Entities
 {
     //Esta clase debe heredar de otra clase
-    public class DataContext: DbContext
+    public class DataContext: IdentityDbContext<User>
     {
         //Para la conexion a la base de datos se debe generar un contructor
         public DataContext(DbContextOptions<DataContext>options): base(options)//pasa una clase generica 

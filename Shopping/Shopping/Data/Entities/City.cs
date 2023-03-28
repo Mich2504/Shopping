@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Shooping.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shopping.Data.Entities
 {
@@ -11,5 +12,6 @@ namespace Shopping.Data.Entities
         public string Name { get; set; }
         //Relacion con la clase States
         public State State { get; set; }
+        public ICollection<User>Users { get; set; }
     }
 }

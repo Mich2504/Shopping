@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Shopping.Data.Entities;
 
 namespace Shopping.Controllers
 {
+    [Authorize(Roles = "Admin")]//quiere decir que todos los metodos de la clase tiene permiso solo el administrador lo mismo pasa si se ponen en metodos individuales
     public class CategoriesController : Controller
     {//inyectar datos 
         private readonly DataContext _context;

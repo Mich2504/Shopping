@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shooping.Data.Entities;
 using Shopping.Data.Entities;
+using Shopping.Models;
 
 namespace Shopping.Helpers
 {
@@ -96,11 +97,11 @@ namespace Shopping.Helpers
         {
             return await _userManager.IsInRoleAsync(user, roleName);
         }
-
-        //public async Task<SignInResult> LoginAsync(LoginViewModel model)
-        //{
-        //    return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, true);
-        //}
+        //Con esto se logea un user
+        public async Task<SignInResult> LoginAsync(LoginViewModel model)
+        {
+            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, true);//el true o false sirve para bloquear el user lo intenta mas de 3 veces
+        }
 
         public async Task LogoutAsync()
         {

@@ -1,9 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shooping.Data.Entities;
 //using Shopping.Common;
 //using Shopping.Common.Responses;
 using Shopping.Data.Entities;
-//using Shopping.Enums;
-//using Shopping.Helpers;
+using Shopping.Enums;
+using Shopping.Helpers;
 
 namespace Shopping.Data
 {
@@ -11,15 +12,15 @@ namespace Shopping.Data
     {
         //Conecta a la base de datos para llenar regitros
         private readonly DataContext _context;
-        //private readonly IUserHelper _userHelper;
+        private readonly IUserHelper _userHelper;
         //private readonly IBlobHelper _blobHelper;
         //private readonly IApiService _apiService;
     
 
-        public SeedDb(DataContext context/*, IUserHelper userHelper, IBlobHelper blobHelper, IApiService apiService*/)
+        public SeedDb(DataContext context, IUserHelper userHelper /*, IBlobHelper blobHelper, IApiService apiService*/)
         {
             _context = context;
-            //_userHelper = userHelper;
+            _userHelper = userHelper;
             //_blobHelper = blobHelper;
             //_apiService = apiService;
         }
@@ -29,8 +30,8 @@ namespace Shopping.Data
          await _context.Database.EnsureCreatedAsync();//Crea la base de datos y aplica las migraciones
             await CheckCategoriesAsync();//Verifica si no hay categorias y las genera
             await CheckCountriesAsync();//Verifica si no hay paises y las genera
-        //    await CheckRolesAsync();
-        //    await CheckUserAsync("1010", "Juan", "Zuluaga", "zulu@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "JuanZuluaga.jpeg", UserType.Admin);
+            await CheckRolesAsync();
+           await CheckUserAsync("1010", "Michelle", "Morales", "moralesmichelle197@gmail.com", "656 194 1539", "Calle del Sol 10224", /*"JuanZuluaga.jpeg",*/ UserType.Admin);
         //    await CheckUserAsync("2020", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpeg", UserType.User);
         //    await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
         //    await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
@@ -97,49 +98,49 @@ namespace Shopping.Data
         //    _context.Products.Add(prodcut);
         //}
 
-        //private async Task<User> CheckUserAsync(
-        //    string document,
-        //    string firstName,
-        //    string lastName,
-        //    string email,
-        //    string phone,
-        //    string address,
-        //    string image,
-        //    UserType userType)
-        //{
-        //    User user = await _userHelper.GetUserAsync(email);
-        //    if (user == null)
-        //    {
-        //        Guid imageId = await _blobHelper.UploadBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\users\\{image}", "users");
-        //        user = new User
-        //        {
-        //            FirstName = firstName,
-        //            LastName = lastName,
-        //            Email = email,
-        //            UserName = email,
-        //            PhoneNumber = phone,
-        //            Address = address,
-        //            Document = document,
-        //            City = _context.Cities.FirstOrDefault(),
-        //            UserType = userType,
-        //            ImageId = imageId
-        //        };
+        private async Task<User> CheckUserAsync(
+            string document,
+            string firstName,
+            string lastName,
+            string email,
+            string phone,
+            string address,
+            //string image,
+            UserType userType)
+        {
+            User user = await _userHelper.GetUserAsync(email);
+            if (user == null)
+            {
+                //Guid imageId = await _blobHelper.UploadBlobAsync($"{Environment.CurrentDirectory}\\wwwroot\\images\\users\\{image}", "users");
+                user = new User
+                {
+                    FirstName = firstName,
+                    LastName = lastName,
+                    Email = email,
+                    UserName = email,
+                    PhoneNumber = phone,
+                    Address = address,
+                    Document = document,
+                    City = _context.Cities.FirstOrDefault(),
+                    UserType = userType,
+                   // ImageId = imageId
+                };
 
-        //        await _userHelper.AddUserAsync(user, "CursoDeZulu2020.");
-        //        await _userHelper.AddUserToRoleAsync(user, userType.ToString());
+                await _userHelper.AddUserAsync(user, "2Papitas");
+                await _userHelper.AddUserToRoleAsync(user, userType.ToString());
 
-        //        string token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-        //        await _userHelper.ConfirmEmailAsync(user, token);
-        //    }
+                //string token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                //await _userHelper.ConfirmEmailAsync(user, token);
+            }
 
-        //    return user;
-        //}
+            return user;
+        }
 
-        //private async Task CheckRolesAsync()
-        //{
-        //    await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
-        //    await _userHelper.CheckRoleAsync(UserType.User.ToString());
-        //}
+        private async Task CheckRolesAsync()
+        {
+            await _userHelper.CheckRoleAsync(UserType.Admin.ToString());
+            await _userHelper.CheckRoleAsync(UserType.User.ToString());
+        }
         private async Task CheckCountriesAsync()
         {
             if (!_context.Countries.Any())

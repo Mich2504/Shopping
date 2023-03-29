@@ -13,6 +13,7 @@ builder.Services.AddDbContext<DataContext>(o =>//se configuro la base de datos
 {
     o.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));//aqui se hace una inyeccion de datos //el cual se definio en appsetting.json
 });
+
 //TODO: Make strongest password
 builder.Services.AddIdentity<User, IdentityRole>(cfg =>
 {
@@ -30,6 +31,16 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
     //cfg.Lockout.AllowedForNewUsers = true;
 }).AddEntityFrameworkStores<DataContext>();
 //Se agrega servicios: Para que haga cambios en las vistas sin nesecidad de volver a cambiar el codigo
+
+//Aqui se muestra la vista de pagina no autorizada
+builder.Services.ConfigureApplicationCookie(options =>
+{
+    options.LoginPath = "/Account/NotAuthorized";
+    options.AccessDeniedPath = "/Account/NotAuthorized";//se manda a esta vista
+});
+
+
+
 builder.Services.AddTransient<SeedDb>();//Se usa una sola vez 
 builder.Services.AddScoped<IUserHelper, UserHelper>();
 //builder.Services.AddScoped<SeedDb>();//la inyecta cada que lo nesecita y la destruye cuando la deja de usar
@@ -53,7 +64,7 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
+app.UseStatusCodePagesWithReExecute("/error/{0}");
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();

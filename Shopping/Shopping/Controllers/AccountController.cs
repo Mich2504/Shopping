@@ -355,7 +355,7 @@ namespace Shooping.Controllers
                     $"<h1>Shopping - Recuperación de Contraseña</h1>" +
                     $"Para recuperar la contraseña haga click en el siguiente enlace:" +
                     $"<p><a href = \"{link}\">Reset Password</a></p>");
-                ModelState.AddModelError(string.Empty, "Las instrucciones para recuperar la contraseña han sido enviadas a su correo.");
+                ViewBag.Message="Las instrucciones para recuperar la contraseña han sido enviadas a su correo.";
                 //_flashMessage.Info("Las instrucciones para recuperar la contraseña han sido enviadas a su correo.");
                 return RedirectToAction(nameof(Login));
             }
@@ -377,17 +377,17 @@ namespace Shooping.Controllers
                 IdentityResult result = await _userHelper.ResetPasswordAsync(user, model.Token, model.Password);
                 if (result.Succeeded)
                 {
-                    ModelState.AddModelError(string.Empty, "Contraseña cambiada con éxito.");
+                    ViewBag.Message = "Contraseña cambiada con éxito.";
 
                     //_flashMessage.Info("Contraseña cambiada con éxito.");
                     return RedirectToAction(nameof(Login));
                 }
-                ModelState.AddModelError(string.Empty, "Error cambiando la contraseña.");
+                ViewBag.Message = "Error cambiando la contraseña.";
 
                 //_flashMessage.Danger("Error cambiando la contraseña.");
                 return View(model);
             }
-            ModelState.AddModelError(string.Empty, "Usuario no encontrado.");
+            ViewBag.Message = "Usuario no encontrado.";
 
            // _flashMessage.Danger("Usuario no encontrado.");
             return View(model);

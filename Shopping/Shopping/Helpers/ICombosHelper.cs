@@ -3,7 +3,7 @@ using Shopping.Data.Entities;
 
 namespace Shopping.Helpers
 {
-    public class ICombosHelper
+    public interface ICombosHelper
     {
         Task<IEnumerable<SelectListItem>> GetComboCategoriesAsync();
 

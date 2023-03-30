@@ -6,8 +6,10 @@ using Shopping.Data;
 using Shopping.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Shooping.Data.Entities;
+using Shooping.Helpers;
 
 var builder = WebApplication.CreateBuilder(args);
+
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<DataContext>(o =>//se configuro la base de datos 
 {
@@ -46,6 +48,7 @@ builder.Services.AddScoped<IUserHelper, UserHelper>();
 //builder.Services.AddScoped<SeedDb>();//la inyecta cada que lo nesecita y la destruye cuando la deja de usar
 //builder.Services.AddSingleton<SeedDb>();//Lo inyecta una vez y no lo destruye lo deja en memoria
 builder.Services.AddScoped<ICombosHelper, CombosHelper>();//se inyectan los datos del combo
+builder.Services.AddScoped<IBlobHelper, BlobHelper>();//inyeccion para imagenes
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 var app = builder.Build();
 SeedData();

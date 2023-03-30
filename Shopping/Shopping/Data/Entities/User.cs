@@ -36,7 +36,7 @@ namespace Shooping.Data.Entities
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
             ? $"https://localhost:7057/images/noimage.png"
-            : $"https://shoppingzulu.blob.core.windows.net/users/{ImageId}";
+            : $"https://shopping1curso.blob.core.windows.net/users/{ImageId}";//es la direccion de azure donde se encuentra almacenada la imagen
 
         [Display(Name = "Tipo de usuario")]
         public UserType UserType { get; set; }

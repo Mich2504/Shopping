@@ -1,10 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Shooping.Data;
 using Shooping.Data.Entities;
+using Shooping.Models;
 using Shopping.Data.Entities;
+using Shopping.Helpers;
 using Shopping.Models;
 
-namespace Shopping.Helpers
+namespace Shooping.Helpers
 {
     public class UserHelper : IUserHelper
     {
@@ -26,32 +29,32 @@ namespace Shopping.Helpers
             return await _userManager.CreateAsync(user, password);
         }
 
-        //public async Task<User> AddUserAsync(AddUserViewModel model)
-        //{
-        //    User user = new()
-        //    {
-        //        Address = model.Address,
-        //        Document = model.Document,
-        //        Email = model.Username,
-        //        FirstName = model.FirstName,
-        //        LastName = model.LastName,
-        //        ImageId = model.ImageId,
-        //        PhoneNumber = model.PhoneNumber,
-        //        City = await _context.Cities.FindAsync(model.CityId),
-        //        UserName = model.Username,
-        //        UserType = model.UserType
-        //    };
+        public async Task<User> AddUserAsync(AddUserViewModel model)
+        {
+            User user = new()
+            {
+                Address = model.Address,
+                Document = model.Document,
+                Email = model.Username,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                ImageId = model.ImageId,
+                PhoneNumber = model.PhoneNumber,
+                City = await _context.Cities.FindAsync(model.CityId),
+                UserName = model.Username,
+                UserType = model.UserType
+            };
 
-        //    IdentityResult result = await _userManager.CreateAsync(user, model.Password);
-        //    if (result != IdentityResult.Success)
-        //    {
-        //        return null;
-        //    }
+            IdentityResult result = await _userManager.CreateAsync(user, model.Password);
+            if (result != IdentityResult.Success)
+            {
+                return null;
+            }
 
-        //    User newUser = await GetUserAsync(model.Username);
-        //    await AddUserToRoleAsync(newUser, user.UserType.ToString());
-        //    return newUser;
-        //}
+            User newUser = await GetUserAsync(model.Username);
+            await AddUserToRoleAsync(newUser, user.UserType.ToString());
+            return newUser;
+        }
 
         public async Task AddUserToRoleAsync(User user, string roleName)
         {
@@ -97,10 +100,10 @@ namespace Shopping.Helpers
         {
             return await _userManager.IsInRoleAsync(user, roleName);
         }
-        //Con esto se logea un user
+
         public async Task<SignInResult> LoginAsync(LoginViewModel model)
         {
-            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, true);//el true o false sirve para bloquear el user lo intenta mas de 3 veces
+            return await _signInManager.PasswordSignInAsync(model.Username, model.Password, model.RememberMe, true);
         }
 
         public async Task LogoutAsync()

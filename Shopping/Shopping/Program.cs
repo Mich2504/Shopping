@@ -7,6 +7,7 @@ using Shopping.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Shooping.Data.Entities;
 using Shooping.Helpers;
+using Shooping.Common;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +20,8 @@ builder.Services.AddDbContext<DataContext>(o =>//se configuro la base de datos
 //TODO: Make strongest password
 builder.Services.AddIdentity<User, IdentityRole>(cfg =>
 {
-    //cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;
-    //cfg.SignIn.RequireConfirmedEmail = true;
+    cfg.Tokens.AuthenticatorTokenProvider = TokenOptions.DefaultAuthenticatorProvider;//Es para validar en email(generador de token
+    cfg.SignIn.RequireConfirmedEmail = true;
     cfg.User.RequireUniqueEmail = true;
     cfg.Password.RequireDigit = false;//change
     cfg.Password.RequiredUniqueChars = 0;
@@ -28,10 +29,10 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
     cfg.Password.RequireNonAlphanumeric = false;//change
     cfg.Password.RequireUppercase = false;//change
     //cfg.Password.RequiredLength = 6;//minimo 6 caracteres
-    //cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-    //cfg.Lockout.MaxFailedAccessAttempts = 3;
-    //cfg.Lockout.AllowedForNewUsers = true;
-}).AddEntityFrameworkStores<DataContext>();
+    cfg.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
+    cfg.Lockout.MaxFailedAccessAttempts = 3;//al equivocarse 3 veces
+    cfg.Lockout.AllowedForNewUsers = true;
+}).AddDefaultTokenProviders().AddEntityFrameworkStores<DataContext>();
 //Se agrega servicios: Para que haga cambios en las vistas sin nesecidad de volver a cambiar el codigo
 
 //TODO: ACTIVAR Aqui se muestra la vista de pagina no autorizada
@@ -48,7 +49,8 @@ builder.Services.AddScoped<IUserHelper, UserHelper>();
 //builder.Services.AddScoped<SeedDb>();//la inyecta cada que lo nesecita y la destruye cuando la deja de usar
 //builder.Services.AddSingleton<SeedDb>();//Lo inyecta una vez y no lo destruye lo deja en memoria
 builder.Services.AddScoped<ICombosHelper, CombosHelper>();//se inyectan los datos del combo
-builder.Services.AddScoped<IBlobHelper, BlobHelper>();//inyeccion para imagenes
+builder.Services.AddScoped<IBlobHelper, BlobHelper>();//inyeccion para correo
+builder.Services.AddScoped<IMailHelper, MailHelper>();
 builder.Services.AddRazorPages().AddRazorRuntimeCompilation();
 var app = builder.Build();
 SeedData();

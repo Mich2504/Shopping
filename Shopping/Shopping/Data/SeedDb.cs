@@ -125,12 +125,12 @@ namespace Shopping.Data
                     UserType = userType,
                    // ImageId = imageId
                 };
-
+                //TODO aqui valida la contrasena del user
                 await _userHelper.AddUserAsync(user, "2Papitas");
                 await _userHelper.AddUserToRoleAsync(user, userType.ToString());
-
-                //string token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
-                //await _userHelper.ConfirmEmailAsync(user, token);
+                //Se manda al correo para que este confirme que es un verdadero usuario
+                string token = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                await _userHelper.ConfirmEmailAsync(user, token);
             }
 
             return user;

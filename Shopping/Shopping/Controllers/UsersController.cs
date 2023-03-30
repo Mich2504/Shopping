@@ -12,6 +12,7 @@ using Shopping.Data.Entities;
 using Shopping.Enums;
 using Shopping.Helpers;
 using Shopping.Models;
+using Response = Shooping.Common.Response;
 
 namespace Shooping.Controllers
 {
@@ -22,13 +23,15 @@ namespace Shooping.Controllers
         private readonly DataContext _context;
         private readonly ICombosHelper _combosHelper;
         private readonly IBlobHelper _blobHelper;
+        private readonly IMailHelper _mailHelper;
 
-        public UsersController(IUserHelper userHelper, DataContext context, ICombosHelper combosHelper, IBlobHelper blobHelper)
+        public UsersController(DataContext context,IUserHelper userHelper,IBlobHelper blobHelper,  ICombosHelper combosHelper,IMailHelper mailHelper )
         {
             _userHelper = userHelper;
             _context = context;
             _combosHelper = combosHelper;
             _blobHelper = blobHelper;
+            _mailHelper = mailHelper;
         }
 
         public async Task<IActionResult> Index()
@@ -66,17 +69,46 @@ namespace Shooping.Controllers
                 {
                     imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
                 }
+                model.ImageId = imageId;
 
                 User user = await _userHelper.AddUserAsync(model);
                 if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "Este correo ya está siendo usado.");
+                    //await _userHelper.AddUserAsync(model, imageId);
+                    model.Countries = await _combosHelper.GetComboCountriesAsync();
+                    model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);//Esta linea hace que al registrar un usuario por segunda vez con el mismo correo. los combos no esten vacios
+                    model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);//
+                    
                     return View(model);
                 }
+                //return RedirectToAction("Index","Home");
+                // return RedirectToAction(nameof(Index));
+                string myToken = await _userHelper.GenerateEmailConfirmationTokenAsync(user);
+                string tokenLink = Url.Action("ConfirmEmail", "Account", new
+                {
+                    userid = user.Id,
+                    token = myToken
+                }, protocol: HttpContext.Request.Scheme);
 
-                return RedirectToAction(nameof(Index));
+
+                Response response = _mailHelper.SendMail(
+                    $"{model.FirstName} {model.LastName}",
+                    model.Username,
+                    "Shopping - Confirmación de Email",
+                    $"<h1>Shopping - Confirmación de Email</h1>" +
+                        $"Para habilitar el usuario por favor hacer click en el siguiente link:, " +
+                        $"<hr><br><p><a href = \"{tokenLink}\">Confirmar Email</a></p>");
+
+                if (response.IsSuccess)
+                {
+                    ViewBag.Message = "Las instrucciones para habilitar el administrador han sido enviadas al correo.";
+                    return View(model);
+                }
             }
-
+            model.Countries = await _combosHelper.GetComboCountriesAsync();
+            model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);//Esta linea hace que al registrar un usuario por segunda vez con el mismo correo. los combos no esten vacios
+            model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);//
             return View(model);
         }
 

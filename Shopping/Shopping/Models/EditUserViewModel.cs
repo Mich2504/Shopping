@@ -42,7 +42,7 @@ namespace Shopping.Models
             : $"https://shopping1curso.blob.core.windows.net/users/{ImageId}";//Es la direccion en donde se almacenan las imagenes en azure
 
         [Display(Name = "Image")]
-        public IFormFile ImageFile { get; set; }
+        public IFormFile? ImageFile { get; set; }//El signo de ? significa que es opcional la imagen
 
         [Display(Name = "País")]
         [Range(1, int.MaxValue, ErrorMessage = "Debes de seleccionar un país.")]

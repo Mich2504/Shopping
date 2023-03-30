@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Shooping.Data;
 using Shooping.Data.Entities;
-using Shooping.Models;
+//using Shooping.Models;
 using Shopping.Data.Entities;
 using Shopping.Helpers;
 using Shopping.Models;
@@ -63,7 +63,7 @@ namespace Shooping.Helpers
 
         public async Task<IdentityResult> ChangePasswordAsync(User user, string oldPassword, string newPassword)
         {
-            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            return await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);//se pasan parametros para cambiar la contrasena
         }
 
         public async Task CheckRoleAsync(string roleName)
@@ -78,7 +78,7 @@ namespace Shooping.Helpers
             }
         }
 
-        public async Task<User> GetUserAsync(string email)
+        public async Task<User> GetUserAsync(string email)//es cambiar la contrase;a
         {
             return await _context.Users
                 .Include(u => u.City)
@@ -93,7 +93,7 @@ namespace Shooping.Helpers
                 .Include(u => u.City)
                 .ThenInclude(c => c.State)
                 .ThenInclude(s => s.Country)
-                .FirstOrDefaultAsync(u => u.Id == userId.ToString());
+                .FirstOrDefaultAsync(u => u.Id == userId.ToString());//se convierte a string
         }
 
         public async Task<bool> IsUserInRoleAsync(User user, string roleName)
@@ -111,7 +111,7 @@ namespace Shooping.Helpers
             await _signInManager.SignOutAsync();
         }
 
-        public async Task<IdentityResult> UpdateUserAsync(User user)
+        public async Task<IdentityResult> UpdateUserAsync(User user)//Se actualiza el usuario
         {
             return await _userManager.UpdateAsync(user);
         }

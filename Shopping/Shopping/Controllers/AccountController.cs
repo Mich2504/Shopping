@@ -7,7 +7,7 @@ using Shooping.Data;
 using Shooping.Data.Entities;
 //using Shooping.Enums;
 using Shooping.Helpers;
-//using Shooping.Models;
+using Shooping.Models;
 using Shopping.Data.Entities;
 using Shopping.Enums;
 using Shopping.Helpers;
@@ -79,7 +79,7 @@ namespace Shooping.Controllers
             await _userHelper.LogoutAsync();
             return RedirectToAction("Index", "Home");
         }
-
+      
         public IActionResult NotAuthorized()
         {
             return View();
@@ -112,11 +112,16 @@ namespace Shooping.Controllers
                 {
                     imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
                 }
-
-                User user = await _userHelper.AddUserAsync(model, imageId);
+                model.ImageId = imageId;
+              //  User user = await _userHelper.AddUserAsync(model, imageId);
+              User user = await _userHelper.AddUserAsync(model);
                 if (user == null)
                 {
                     ModelState.AddModelError(string.Empty, "Este correo ya está siendo usado.");
+                    //await _userHelper.AddUserAsync(model, imageId);
+                    model.Countries = await _combosHelper.GetComboCountriesAsync();
+                    model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);//Esta linea hace que al registrar un usuario por segunda vez con el mismo correo. los combos no esten vacios
+                    model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);//
                     return View(model);
                 }
 
@@ -134,8 +139,9 @@ namespace Shooping.Controllers
                     return RedirectToAction("Index", "Home");
                 }
             }
-
-
+            model.Countries = await _combosHelper.GetComboCountriesAsync();
+            model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);//Esta linea hace que al registrar un usuario por segunda vez con el mismo correo. los combos no esten vacios
+            model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);//
             return View(model);
         }
     
@@ -190,7 +196,7 @@ namespace Shooping.Controllers
 
         public async Task<IActionResult> ChangeUser()
         {
-            User user = await _userHelper.GetUserAsync(User.Identity.Name);
+            User user = await _userHelper.GetUserAsync(User.Identity.Name);//se convierten los datos
             if (user == null)
             {
                 return NotFound();
@@ -216,76 +222,76 @@ namespace Shooping.Controllers
             return View(model);
         }
 
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public async Task<IActionResult> ChangeUser(EditUserViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        Guid imageId = model.ImageId;
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ChangeUser(EditUserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                Guid imageId = model.ImageId;
 
-        //        if (model.ImageFile != null)
-        //        {
-        //            imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");
-        //        }
+                if (model.ImageFile != null)//significa que cambio la foto
+                {
+                    imageId = await _blobHelper.UploadBlobAsync(model.ImageFile, "users");//lo sube al contenedor de users
+                }
 
-        //        User user = await _userHelper.GetUserAsync(User.Identity.Name);
+                User user = await _userHelper.GetUserAsync(User.Identity.Name);
 
-        //        user.FirstName = model.FirstName;
-        //        user.LastName = model.LastName;
-        //        user.Address = model.Address;
-        //        user.PhoneNumber = model.PhoneNumber;
-        //        user.ImageId = imageId;
-        //        user.City = await _context.Cities.FindAsync(model.CityId);
-        //        user.Document = model.Document;
+                user.FirstName = model.FirstName;
+                user.LastName = model.LastName;
+                user.Address = model.Address;
+                user.PhoneNumber = model.PhoneNumber;
+                user.ImageId = imageId;
+                user.City = await _context.Cities.FindAsync(model.CityId);
+                user.Document = model.Document;
 
-        //        await _userHelper.UpdateUserAsync(user);
-        //        return RedirectToAction("Index", "Home");
-        //    }
+                await _userHelper.UpdateUserAsync(user);//se añade a la base de datos
+                return RedirectToAction("Index", "Home");
+            }
 
-        //    model.Countries = await _combosHelper.GetComboCountriesAsync();
-        //    model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
-        //    model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
-        //    return View(model);
-        //}
+            model.Countries = await _combosHelper.GetComboCountriesAsync();
+            model.States = await _combosHelper.GetComboStatesAsync(model.CountryId);
+            model.Cities = await _combosHelper.GetComboCitiesAsync(model.StateId);
+            return View(model);
+        }
 
-        //public IActionResult ChangePassword()
-        //{
-        //    return View();
-        //}
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
 
-        //[HttpPost]
-        //public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (model.OldPassword == model.NewPassword)
-        //        {
-        //            ModelState.AddModelError(string.Empty, "Debes ingresar una contraseña diferente.");
-        //            return View(model);
-        //        }
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                if (model.OldPassword == model.NewPassword)
+                {
+                    ModelState.AddModelError(string.Empty, "Debes ingresar una contraseña diferente.");
+                    return View(model);
+                }
 
-        //        User? user = await _userHelper.GetUserAsync(User.Identity.Name);
-        //        if (user != null)
-        //        {
-        //            IdentityResult? result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
-        //            if (result.Succeeded)
-        //            {
-        //                return RedirectToAction("ChangeUser");
-        //            }
-        //            else
-        //            {
-        //                ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            ModelState.AddModelError(string.Empty, "Usuario no encontrado.");
-        //        }
-        //    }
+                User? user = await _userHelper.GetUserAsync(User.Identity.Name);
+                if (user != null)
+                {
+                    IdentityResult? result = await _userHelper.ChangePasswordAsync(user, model.OldPassword, model.NewPassword);
+                    if (result.Succeeded)
+                    {
+                        return RedirectToAction("ChangeUser");
+                    }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, result.Errors.FirstOrDefault().Description);
+                    }
+                }
+                else
+                {
+                    ModelState.AddModelError(string.Empty, "Usuario no encontrado.");
+                }
+            }
 
-        //    return View(model);
-        //}
+            return View(model);
+        }
 
         //public IActionResult RecoverPassword()
         //{

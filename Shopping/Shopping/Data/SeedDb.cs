@@ -31,12 +31,12 @@ namespace Shopping.Data
             await CheckCategoriesAsync();//Verifica si no hay categorias y las genera
             await CheckCountriesAsync();//Verifica si no hay paises y las genera
             await CheckRolesAsync();
-           await CheckUserAsync("1010", "Michelle", "Morales", "moralesmichelle197@gmail.com", "656 194 1539", "Calle del Sol 10224", /*"JuanZuluaga.jpeg",*/ UserType.Admin);
-        //    await CheckUserAsync("2020", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpeg", UserType.User);
-        //    await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
-        //    await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
-        //    await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
-        //    await CheckProductsAsync();
+           await CheckUserAsync("1010", "Michelle", "Morales", "moralesmichelle197@gmail.com", "656 194 1539", "Calle del Sol 10224", "JuanZuluaga.jpeg", UserType.Admin);
+            await CheckUserAsync("2020", "Ledys", "Bedoya", "ledys@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "LedysBedoya.jpeg", UserType.User);
+            await CheckUserAsync("3030", "Brad", "Pitt", "brad@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Brad.jpg", UserType.User);
+            await CheckUserAsync("4040", "Angelina", "Jolie", "angelina@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "Angelina.jpg", UserType.User);
+            await CheckUserAsync("5050", "Bob", "Marley", "bob@yopmail.com", "322 311 4620", "Calle Luna Calle Sol", "bob.jpg", UserType.User);
+           // await CheckProductsAsync();
         }
 
         //private async Task CheckProductsAsync()
@@ -105,7 +105,7 @@ namespace Shopping.Data
             string email,
             string phone,
             string address,
-            //string image,
+            string image,
             UserType userType)
         {
             User user = await _userHelper.GetUserAsync(email);

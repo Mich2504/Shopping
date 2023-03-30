@@ -34,12 +34,12 @@ builder.Services.AddIdentity<User, IdentityRole>(cfg =>
 }).AddEntityFrameworkStores<DataContext>();
 //Se agrega servicios: Para que haga cambios en las vistas sin nesecidad de volver a cambiar el codigo
 
-//Aqui se muestra la vista de pagina no autorizada
-builder.Services.ConfigureApplicationCookie(options =>
-{
-    options.LoginPath = "/Account/NotAuthorized";
-    options.AccessDeniedPath = "/Account/NotAuthorized";//se manda a esta vista
-});
+//TODO: ACTIVAR Aqui se muestra la vista de pagina no autorizada
+//builder.Services.ConfigureApplicationCookie(options =>
+//{
+//    options.LoginPath = "/Account/NotAuthorized";
+//    options.AccessDeniedPath = "/Account/NotAuthorized";//se manda a esta vista
+//});
 
 
 

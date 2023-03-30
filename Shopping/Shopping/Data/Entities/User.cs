@@ -35,7 +35,7 @@ namespace Shooping.Data.Entities
         //TODO: Pending to put the correct path
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
-            ? $"https://localhost:7057/images/noimage.png"
+            ? $"https://localhost:7045/images/noimage.png"//revisar el puerto de salida
             : $"https://shopping1curso.blob.core.windows.net/users/{ImageId}";//es la direccion de azure donde se encuentra almacenada la imagen
 
         [Display(Name = "Tipo de usuario")]

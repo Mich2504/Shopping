@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Shooping.Data.Entities;
+using System.ComponentModel.DataAnnotations;
 
 namespace Shopping.Data.Entities
 {
@@ -9,5 +10,6 @@ namespace Shopping.Data.Entities
         [MaxLength(50, ErrorMessage = "El campo{0} debe tener maximo {1} caracteres")]
         [Required(ErrorMessage = "El campo (0) es obligatorio.")]//Validacion de que el nombre no sea null
         public string Name { get; set; }
+        public ICollection<ProductCategory> ProductCategories { get; set; }//SE HACE la referencia
     }
 }

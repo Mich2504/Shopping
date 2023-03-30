@@ -8,12 +8,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NuGet.Configuration;
+using Shooping.Data;
 using Shopping.Data.Entities;
 using Shopping.Models;
 
 namespace Shopping.Controllers
-{
-    [Authorize(Roles = "Admin")]
+{   //TODO: ACTIVAR DE NUEVO PARA QUE SEAN PRIVADOS
+    //[Authorize(Roles = "Admin")]
     //Es una clase que hereda de la clase controller
     public class CountriesController : Controller
     {

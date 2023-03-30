@@ -12,7 +12,7 @@ namespace Shopping.Controllers
         {
             _logger = logger;
         }
-        //TODO: Activa de nuevo
+       
         public IActionResult Index()
         {
             return View();
@@ -24,15 +24,15 @@ namespace Shopping.Controllers
         }
 
         //[ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-        //public IActionResult Error()
-        //{
-        //    return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
-        //}
-        //[Route("error/404")]//lo manda a la vista
-        //public IActionResult Error404()
-        //{
-        //    return View();
-        //}
+        public IActionResult Error()
+        {
+            return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        }
+        [Route("error/404")]//lo manda a la vista
+        public IActionResult Error404()
+        {
+            return View();
+        }
 
     }
 }

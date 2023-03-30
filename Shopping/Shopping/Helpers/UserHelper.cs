@@ -3,7 +3,6 @@ using Microsoft.EntityFrameworkCore;
 using Shooping.Data;
 using Shooping.Data.Entities;
 //using Shooping.Models;
-using Shopping.Data.Entities;
 using Shopping.Helpers;
 using Shopping.Models;
 

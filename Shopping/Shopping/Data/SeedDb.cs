@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Shooping.Data;
 using Shooping.Data.Entities;
 using Shooping.Helpers;
 //using Shopping.Common;

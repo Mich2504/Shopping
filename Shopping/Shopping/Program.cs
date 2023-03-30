@@ -1,13 +1,13 @@
 //Esta clase abarca todo
 
 using Microsoft.EntityFrameworkCore;
-using Shopping.Data.Entities;
 using Shopping.Data;
 using Shopping.Helpers;
 using Microsoft.AspNetCore.Identity;
 using Shooping.Data.Entities;
 using Shooping.Helpers;
 using Shooping.Common;
+using Shooping.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 

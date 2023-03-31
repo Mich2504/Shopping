@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using Shopping.Models;
 using System.ComponentModel.DataAnnotations;
 
-namespace Shooping.Models
+namespace Shooping.Models//TODO: Change name for Shooping
 {
-    public class CreateProductViewModel
+    public class CreateProductViewModel: EditProductViewModel
     {
         [Display(Name = "Categoría")]
         [Range(1, int.MaxValue, ErrorMessage = "Debes seleccionar una categoría.")]

@@ -35,10 +35,10 @@ namespace Shopping.Models
         [Display(Name = "Foto")]
         public Guid ImageId { get; set; }
 
-        //TODO: Pending to put the correct paths
+        //TODO: Confirma que el puerto sea el correcto
         [Display(Name = "Foto")]
         public string ImageFullPath => ImageId == Guid.Empty
-            ? $"https://localhost:7057/images/noimage.png"
+            ? $"https://localhost:7045/images/noimage.png"
             : $"https://shopping1curso.blob.core.windows.net/users/{ImageId}";//Es la direccion en donde se almacenan las imagenes en azure
 
         [Display(Name = "Image")]

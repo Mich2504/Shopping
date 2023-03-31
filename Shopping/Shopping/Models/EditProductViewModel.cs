@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Shooping.Models
+namespace Shopping.Models//TODO: VERIFICA QUE ESTE EN EL PROYECTO CORRECTO CHANGE FOR Shooping
 {
     public class EditProductViewModel
     {
